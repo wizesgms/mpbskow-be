@@ -99,6 +99,12 @@
                 <div data-i18n="Promotion">Promotion</div>
             </a>
         </li>
+        <li class="menu-item {{ request()->routeIs('website.deposit*') ? 'active ' : '' }}">
+            <a href="{{ route('website.deposit') }}" class="menu-link">
+                <i class="menu-icon tf-icons mdi mdi-account-cash"></i>
+                <div data-i18n="Deposit Promotion">Deposit Promotion</div>
+            </a>
+        </li>
         <li class="menu-item {{ request()->routeIs('website.banner*') ? 'active ' : '' }}">
             <a href="{{ route('website.banner') }}" class="menu-link">
                 <i class="menu-icon tf-icons mdi mdi-play-box-outline"></i>

@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Bonus;
 use Illuminate\Support\Facades\DB;
+use DataTables;
 
 class WithdrawController extends Controller
 {
@@ -16,9 +17,37 @@ class WithdrawController extends Controller
         return view('withdraw.pending',compact('transaction'));
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $transaction = Transaction::where('transaksi','Withdraw')->with('BankUser')->orderBy('created_at','desc')->get();
+        $transaction = Transaction::where('transaksi','Withdraw')->orderBy('created_at','desc');
+        if ($request->ajax()) {
+            return DataTables::of($transaction)
+                ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    if ($row->status == 'Pending') {
+                        $statusbtn = '<span class="badge bg-label-warning rounded-pill">Pending</span>';
+                    } elseif ($row->status == 'Ditolak') {
+                        $statusbtn = '<span class="badge bg-label-danger rounded-pill">Rejected</span>';
+                    } else {
+                        $statusbtn = '<span class="badge bg-label-success rounded-pill">Active</span>';
+                    }
+                    return $statusbtn;
+                })
+                ->addColumn('bank_user', function ($row) {
+                    $admin_btn = $row->BankUser->nama_pemilik . ' / ' .$row->BankUser->nama_bank . ' / ' .$row->BankUser->nomor_rekening;
+                    return $admin_btn;
+                })
+                ->addColumn('created_at', function ($row) {
+                    $cbtrn = $row->created_at;
+                    return $cbtrn;
+                })
+                ->addColumn('total', function ($row) {
+                    $amounts = 'Rp.' . number_format($row->total);
+                    return $amounts;
+                })
+                ->rawColumns(['status','created_at', 'total','bank_user'])
+                ->make(true);
+        }
         return view('withdraw.list',compact('transaction'));
     }
 

@@ -1,26 +1,29 @@
 @extends('layouts.main')
 @section('panel')
 <div class="row">
-    <div class="col-sm-5 mb-3">
+    <div class="col-sm-4 mb-3">
         <div class="card">
             <div class="card-body">
-                @if(Route::is('website.promotion.edit'))
+                @if(Route::is('website.deposit.edit'))
                 <form role="form" action="{{ route('website.promotion.update',$edb->id) }}" method="post"
                     enctype="multipart/form-data">
-                    <input type="hidden" name="type" value="1">
+                    <input type="hidden" name="type" value="2">
                     @csrf
                     <div class="form-group mb-2">
-                        <label class="form-label">Image : (Optional)</label>
-                        <a href="{{ $edb->gambar }}" target="_blank"><img class="input-group mb-3" style="width: 150px;" src="{{ $edb->gambar }}"></a>
-                        <input class="form-control" type="file" name="file">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="form-label">Promotion Title :</label>
+                        <label class="form-label">Title :</label>
                         <input class="form-control" type="text" name="judul" value="{{ $edb->judul }}" required>
                     </div>
                     <div class="form-group mb-2">
-                        <label class="form-label">Description :</label>
-                        <textarea class="form-control summernoteEditor" type="text" name="deskripsi">{!! $edb->text !!}</textarea>
+                        <label class="form-label">Minimal Deposit :</label>
+                        <input class="form-control" type="number" value="{{ $edb->minimal_deposit }}" name="minimal_depo" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Bonus Persentase :</label>
+                        <input class="form-control" type="number" name="bonus" value="{{ $edb->bonus }}" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Turnover :</label>
+                        <input class="form-control" type="number" name="to" value="{{ $edb->turnover }}" required>
                     </div>
                     <div class="form-group mb-2">
                         <label class="form-label">Status :</label>
@@ -36,19 +39,23 @@
                 @else
                 <form role="form" action="{{ route('website.promotion.create') }}" method="post"
                     enctype="multipart/form-data">
-                    <input type="hidden" name="type" value="1">
+                    <input type="hidden" name="type" value="2">
                     @csrf
                     <div class="form-group mb-2">
-                        <label class="form-label">Upload Image :</label>
-                        <input class="form-control" type="file" name="file">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label class="form-label">Promotion Title :</label>
+                        <label class="form-label">Title :</label>
                         <input class="form-control" type="text" name="judul" required>
                     </div>
                     <div class="form-group mb-2">
-                        <label class="form-label">Description :</label>
-                        <textarea class="form-control summernoteEditor" type="text" name="deskripsi"></textarea>
+                        <label class="form-label">Minimal Deposit :</label>
+                        <input class="form-control" type="number" value="0" name="minimal_depo" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Bonus Persentase :</label>
+                        <input class="form-control" type="number" name="bonus" value="0" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label class="form-label">Turnover :</label>
+                        <input class="form-control" type="number" name="to" value="0" required>
                     </div>
                     <div class="form-group mb-2">
                         <label class="form-label">Status :</label>
@@ -64,7 +71,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-7 mb-3">
+    <div class="col-sm-8 mb-3">
         <!-- Invoice List Table -->
         <div class="card">
             <div class="card-datatable table-responsive">
@@ -73,7 +80,10 @@
                         <tr>
                             <th class="text-center" style="vertical-align: middle; font-size: 12px;">#</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 12px;">Judul</th>
-                            <th class="text-center" style="vertical-align: middle; font-size: 12px;">Image</th>
+                            <th class="text-center" style="vertical-align: middle; font-size: 12px;">Minimal Deposit
+                            </th>
+                            <th class="text-center" style="vertical-align: middle; font-size: 12px;">Persentase</th>
+                            <th class="text-center" style="vertical-align: middle; font-size: 12px;">Turnover</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 12px;">Status</th>
                             <th class="text-center" style="vertical-align: middle; font-size: 12px;">Aksi</th>
                         </tr>
@@ -87,14 +97,24 @@
                             <td class="text-left" style="vertical-align: middle; white-space: normal; font-size: 14px;">
                                 {{ $item->judul }}
                             </td>
-                            <th class="text-center" style="vertical-align: middle; font-size: 14px;"><img
-                                    style="width: 120px;" src="{{ $item->gambar }}" loading="lazy"></th>
+                            <td class="text-center"
+                                style="vertical-align: middle; white-space: normal; font-size: 14px;">Rp.
+                                {{ number_format($item->minimal_deposit) }}
+                            </td>
+                            <td class="text-center"
+                                style="vertical-align: middle; white-space: normal; font-size: 14px;">
+                                {{ $item->bonus }}
+                            </td>
+                            <td class="text-center"
+                                style="vertical-align: middle; white-space: normal; font-size: 14px;">Rp.
+                                {{ number_format($item->turnover) }}
+                            </td>
                             <td class="text-center"
                                 style="vertical-align: middle; white-space: normal; font-size: 14px;">
                                 {{ $item->status }}
                             </td>
                             <td class="text-center" style="vertical-align: middle; font-size: 14px;">
-                                <a href="{{ route('website.promotion.edit',$item->id) }}" class="btn btn-xs btn-primary"><span
+                                <a href="{{ route('website.deposit.edit',$item->id) }}" class="btn btn-xs btn-primary"><span
                                         class="mdi mdi-pencil"></span></a>
                                 <a href="{{ route('website.promotion.delete',$item->id) }}"
                                     class="btn btn-xs btn-danger"

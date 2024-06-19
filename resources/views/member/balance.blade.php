@@ -43,7 +43,7 @@
             <!-- Invoice List Table -->
             <div class="card">
                 <div class="card-datatable table-responsive">
-                    <table id="default-datatable" class="table table-bordered table-sm">
+                    <table id="data-table" class="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">#</th>
@@ -53,15 +53,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($user as $item)
-                                <tr>
-                                    <td class="text-center" style="vertical-align: middle; white-space: normal;">
-                                        {{ $loop->iteration }}</td>
-                                    <td class="text-center" style="vertical-align: middle; white-space: normal;">{{ $item->username }}</td>
-                                    <td class="text-center" style="vertical-align: middle; white-space: normal;">{{ $item->nama_lengkap }}</td>
-                                    <td class="text-right" style="vertical-align: middle; white-space: normal;">Rp. {{ number_format($item->balance ,2) }}</td>
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -69,3 +60,26 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+<script type="text/javascript">
+    $(function () {
+
+      var table = $('#data-table').DataTable({
+          processing: true,
+          serverSide: true,
+          lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+          ajax: '{{ route('members.list') }}',
+          columns: [
+              {data: 'id', name: 'id', orderable: false},
+              {data: 'username', name: 'username', orderable: false},
+              {data: 'nama_lengkap', name: 'nama_lengkap', orderable: false},
+              {data: 'balance', name: 'balance', orderable: false},
+          ] ,
+          columnDefs: [
+        { className: 'text-center', targets: '_all' }]
+      });
+
+    });
+</script>
+@endpush

@@ -52,6 +52,9 @@ Route::middleware(['admin'])->group( function () {
     Route::get('settings/promotion','PromotionController@index')->name('website.promotion');
     Route::get('settings/promotion/{id}/edit','PromotionController@edit')->name('website.promotion.edit');
 
+    Route::get('settings/promotion-deposit','PromotionController@deposit')->name('website.deposit');
+    Route::get('settings/promotion-deposit/{id}/edit','PromotionController@editd')->name('website.deposit.edit');
+
     Route::post('settings/promotion/{id}/update','PromotionController@update')->name('website.promotion.update');
     Route::post('settings/promotion/create','PromotionController@create')->name('website.promotion.create');
     Route::get('settings/promotion/{id}/delete','PromotionController@delete')->name('website.promotion.delete');

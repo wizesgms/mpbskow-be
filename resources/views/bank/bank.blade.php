@@ -2,7 +2,7 @@
 @section('panel')
     <div class="row">
         <div class="col-lg-4">
-            @if (Route::is('website.promotion.edit'))
+            @if (Route::is('bank.edit'))
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Banks Edit</h4>

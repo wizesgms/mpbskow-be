@@ -15,8 +15,29 @@ class PromotionController extends Controller
     public function index()
     {
         if (auth()->guard('admin')->user()->level == 'master') {
-            $promotion = Bonus::all();
+            $promotion = Bonus::where('type',1)->get();
             return view('promotion.promotion', compact('promotion'));
+        } else {
+            abort(404);
+        }
+    }
+
+    public function deposit()
+    {
+        if (auth()->guard('admin')->user()->level == 'master') {
+            $promotion = Bonus::where('type',2)->get();
+            return view('promotion.deposit', compact('promotion'));
+        } else {
+            abort(404);
+        }
+    }
+
+    public function editd($id)
+    {
+        if (auth()->guard('admin')->user()->level == 'master') {
+            $edb = Bonus::find($id);
+            $promotion = Bonus::where('type',2)->get();
+            return view('promotion.deposit', compact('promotion','edb'));
         } else {
             abort(404);
         }
@@ -26,7 +47,7 @@ class PromotionController extends Controller
     {
         if (auth()->guard('admin')->user()->level == 'master') {
             $edb = Bonus::find($id);
-            $promotion = Bonus::all();
+            $promotion = Bonus::where('type',1  )->get();
             return view('promotion.promotion', compact('promotion','edb'));
         } else {
             abort(404);
@@ -55,6 +76,7 @@ class PromotionController extends Controller
         $promotion->bonus = $request->bonus;
         $promotion->turnover = $request->to;
         $promotion->status = $request->status;
+        $promotion->type = $request->type;
         $promotion->save();
 
         return back()->with('success', 'Promotion Successfully added');

@@ -9,11 +9,42 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
+use DataTables;
+
 class MemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = User::all();
+        if ($request->ajax()) {
+            return DataTables::of($user)
+                ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    if ($row->status == 1) {
+                        $statusbtn = '<span class="badge bg-label-success rounded-pill">Active</span>';
+                    } else {
+                        $statusbtn = '<span class="badge bg-label-danger rounded-pill">Suspend</span>';
+                    }
+
+                    return $statusbtn;
+                })
+                ->addColumn('action', function ($row) {
+                    $action = '<a href="'. route('members.list.details',$row->extplayer) .'"
+                    class="btn rounded-pill btn-sm btn-icon btn-primary btn-fab demo waves-effect waves-light"><i
+                        class="tf-icons mdi mdi-eye-outline"></i></a>';
+                    return $action;
+                })
+                ->addColumn('created_at', function ($row) {
+                    $cbtrn = $row->created_at;
+                    return $cbtrn;
+                })
+                ->addColumn('balance', function ($row) {
+                    $amounts = 'Rp.' . number_format($row->balance);
+                    return $amounts;
+                })
+                ->rawColumns(['status', 'action', 'created_at', 'balance'])
+                ->make(true);
+        }
         return view('member.list', compact('user'));
     }
 

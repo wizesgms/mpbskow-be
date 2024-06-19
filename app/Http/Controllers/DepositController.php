@@ -9,18 +9,53 @@ use App\Models\Bonus;
 use App\Models\Bank;
 use Illuminate\Support\Facades\DB;
 
+use DataTables;
+
 class DepositController extends Controller
 {
     public function index()
     {
-        $transaction = Transaction::where('transaksi','Top Up')->with('BankUser')->orderBy('created_at','desc')->where('status','Pending')->get();
-        return view('deposit.pending',compact('transaction'));
+        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->orderBy('created_at', 'desc')->where('status', 'Pending')->get();
+        return view('deposit.pending', compact('transaction'));
     }
 
-    public function list()
+    public function list(Request $request)
     {
-        $transaction = Transaction::where('transaksi','Top Up')->orderBy('created_at','desc')->with('BankUser')->get();
-        return view('deposit.list',compact('transaction'));
+        $transaction = Transaction::where('transaksi', 'Top Up')->orderBy('created_at', 'desc');
+        if ($request->ajax()) {
+            return DataTables::of($transaction)
+                ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    if ($row->status == 'Pending') {
+                        $statusbtn = '<span class="badge bg-label-warning rounded-pill">Pending</span>';
+                    } elseif ($row->status == 'Ditolak') {
+                        $statusbtn = '<span class="badge bg-label-danger rounded-pill">Rejected</span>';
+                    } else {
+                        $statusbtn = '<span class="badge bg-label-success rounded-pill">Active</span>';
+                    }
+                    return $statusbtn;
+                })
+                ->addColumn('invoice', function ($row) {
+                    $invoice = '<a href="' . $row->gambar . '" target="_blank"
+                                            class="btn btn-info btn-sm">Invoice</a>';
+                    return $invoice;
+                })
+                ->addColumn('bank_user', function ($row) {
+                    $admin_btn = $row->BankUser->nama_pemilik . ' / ' .$row->BankUser->nama_bank . ' / ' .$row->BankUser->nomor_rekening;
+                    return $admin_btn;
+                })
+                ->addColumn('created_at', function ($row) {
+                    $cbtrn = $row->created_at;
+                    return $cbtrn;
+                })
+                ->addColumn('total', function ($row) {
+                    $amounts = 'Rp.' . number_format($row->total);
+                    return $amounts;
+                })
+                ->rawColumns(['status', 'created_at', 'total', 'invoice','bank_user'])
+                ->make(true);
+        }
+        return view('deposit.list', compact('transaction'));
     }
 
     public function approve($id)
@@ -28,7 +63,7 @@ class DepositController extends Controller
         $transaction = Transaction::find($id);
         $bonus = Bonus::find($transaction->bonus);
         $user = User::find($transaction->id_user);
-        $bank = Bank::where('nama_bank',$transaction->metode)->where('level','admin')->first();
+        $bank = Bank::where('nama_bank', $transaction->metode)->where('level', 'admin')->first();
 
         $transaction->transaction_by = auth()->guard('admin')->user()->username;
         $transaction->status = 'Sukses';
@@ -37,7 +72,7 @@ class DepositController extends Controller
         $bank->amount_trx = $bank->amount_trx + $transaction->total;
         $bank->save();
 
-        if(!empty($bonus)) {
+        if (!empty($bonus)) {
             $bonust =  $transaction->total * $bonus->bonus / 100;
             $totals =  $transaction->total + $bonust;
         } else {
@@ -50,7 +85,7 @@ class DepositController extends Controller
         $user->balance = $user->balance + $totals;
         $user->save();
 
-        return back()->with('success','Deposit Sucesssfully approved');
+        return back()->with('success', 'Deposit Sucesssfully approved');
     }
 
     public function reject($id)
@@ -61,7 +96,7 @@ class DepositController extends Controller
         $transaction->transaction_by = auth()->guard('admin')->user()->username;
         $transaction->save();
 
-        return back()->with('success','Deposit Sucesssfully rejected');
+        return back()->with('success', 'Deposit Sucesssfully rejected');
     }
 
     function curl_postc($endpoint)

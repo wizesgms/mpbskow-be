@@ -12,6 +12,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">#</th>
+                                <th class="text-center" style="vertical-align: middle; font-size: 12px;">Trx ID</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Username</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Amount</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Bank Users</th>
@@ -27,6 +28,9 @@
                                     <td class="text-center"
                                         style="vertical-align: middle; white-space: normal; font-size: 13px;">
                                         {{ $loop->iteration }}</td>
+                                    <td class="text-center"
+                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
+                                        {{ $trx->trx_id }}</td>
                                     <td class="text-center"
                                         style="vertical-align: middle; white-space: normal; font-size: 13px;">
                                         {{ $trx->username }}</td>

@@ -8,7 +8,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-datatable table-responsive">
-                    <table id="default-datatable" class="table table-bordered table-sm">
+                    <table id="data-table" class="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">#</th>
@@ -23,44 +23,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($user as $member)
-                                <tr>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $loop->iteration }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $member->username }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $member->nama_lengkap }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $member->no_hp }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $member->email }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ number_format($member->balance, 2) }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $member->created_at }}</td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        @if ($member->status == 1)
-                                            <span class="badge bg-label-success rounded-pill">Active</span>
-                                        @else
-                                            <span class="badge bg-label-danger rounded-pill">Suspend</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center"
-                                        style="vertical-align: middle; white-space: normal; font-size: 13px;"><a
-                                            href="{{ route('members.list.details',$member->extplayer) }}"
-                                            class="btn rounded-pill btn-sm btn-icon btn-primary btn-fab demo waves-effect waves-light"><i
-                                                class="tf-icons mdi mdi-eye-outline"></i></a></td>
-                                </tr>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -68,3 +30,31 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+<script type="text/javascript">
+    $(function () {
+
+      var table = $('#data-table').DataTable({
+          processing: true,
+          serverSide: true,
+          lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
+          ajax: window.location.href,
+          columns: [
+              {data: 'id', name: 'id', orderable: false},
+              {data: 'username', name: 'username', orderable: false},
+              {data: 'nama_lengkap', name: 'nama_lengkap', orderable: false},
+              {data: 'no_hp', name: 'no_hp', orderable: false},
+              {data: 'email', name: 'email', orderable: false},
+              {data: 'balance', name: 'balance', orderable: false},
+              {data: 'created_at', name: 'created_at', orderable: false},
+              {data: 'status', name: 'status', orderable: false, searchable: false},
+              {data: 'action', name: 'action', orderable: false, searchable: false},
+          ] ,
+          columnDefs: [
+        { className: 'text-center', targets: '_all' }]
+      });
+
+    });
+</script>
+@endpush

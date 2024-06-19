@@ -12,7 +12,6 @@ return [
         'expire' => 60,
         'encrypt' => false,
         'bgImage' => false,
-        'bgColor' => '#ecf2f4',
         'fontColors' => ['#2c3e50'],
     ],
     'math' => [
