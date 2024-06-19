@@ -182,6 +182,7 @@
         $(document).ready(function() {
             //Default data table
             $('#default-datatable').DataTable();
+            $('#default-datatable2').DataTable();
             $('.summernoteEditor').summernote({
                 height: 300,
                 tabsize: 2

@@ -17,6 +17,7 @@
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Phone Number</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Email</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Balance</th>
+                                <th class="text-center" style="vertical-align: middle; font-size: 12px;">Upline ID</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Register Date</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Status</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Action</th>
@@ -47,6 +48,7 @@
               {data: 'no_hp', name: 'no_hp', orderable: false},
               {data: 'email', name: 'email', orderable: false},
               {data: 'balance', name: 'balance', orderable: false},
+              {data: 'refferal', name: 'refferal', orderable: false},
               {data: 'created_at', name: 'created_at', orderable: false},
               {data: 'status', name: 'status', orderable: false, searchable: false},
               {data: 'action', name: 'action', orderable: false, searchable: false},

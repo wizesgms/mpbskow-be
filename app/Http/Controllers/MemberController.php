@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Bank;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Transaction;
+use App\Models\Refferal;
 use Illuminate\Support\Facades\DB;
 
 use DataTables;
@@ -15,7 +16,7 @@ class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::all();
+        $user = User::with('Refferal');
         if ($request->ajax()) {
             return DataTables::of($user)
                 ->addIndexColumn()
@@ -42,7 +43,11 @@ class MemberController extends Controller
                     $amounts = 'Rp.' . number_format($row->balance);
                     return $amounts;
                 })
-                ->rawColumns(['status', 'action', 'created_at', 'balance'])
+                ->addColumn('refferal', function ($row) {
+                    $amounts = $row->Refferal->reff_code;
+                    return $amounts;
+                })
+                ->rawColumns(['status', 'action', 'created_at', 'balance','refferal'])
                 ->make(true);
         }
         return view('member.list', compact('user'));
@@ -57,9 +62,12 @@ class MemberController extends Controller
     public function details($extplayer)
     {
         $user = User::where('extplayer', $extplayer)->first();
+        $reffs = Refferal::where('user_id', $user->id)->first();
+        $reff = Refferal::where('upline', $reffs->reff_code)->with('User')->get();
+        $reffc = Refferal::where('upline', $reffs->reff_code)->count();
         $transaction = Transaction::where('id_user', $user->id)->get();
         $bank = Bank::where('id_user', $user->id)->first();
-        return view('member.details', compact('user', 'transaction', 'bank'));
+        return view('member.details', compact('user', 'transaction', 'bank','reff','reffc'));
     }
 
     public function balanceup(Request $request)
