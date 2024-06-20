@@ -14,6 +14,8 @@
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">#</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Username</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Fullname</th>
+                                <th class="text-center" style="vertical-align: middle; font-size: 12px;">Bank Name</th>
+                                <th class="text-center" style="vertical-align: middle; font-size: 12px;">Bank AccNo</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Phone Number</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Email</th>
                                 <th class="text-center" style="vertical-align: middle; font-size: 12px;">Balance</th>
@@ -45,6 +47,8 @@
               {data: 'id', name: 'id', orderable: false},
               {data: 'username', name: 'username', orderable: false},
               {data: 'nama_lengkap', name: 'nama_lengkap', orderable: false},
+              {data: 'bank_name', name: 'bank_name', orderable: false},
+              {data: 'nomor_rekening', name: 'nomor_rekening', orderable: false},
               {data: 'no_hp', name: 'no_hp', orderable: false},
               {data: 'email', name: 'email', orderable: false},
               {data: 'balance', name: 'balance', orderable: false},

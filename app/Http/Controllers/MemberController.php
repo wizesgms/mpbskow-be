@@ -16,7 +16,7 @@ class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::with('Refferal');
+        $user = User::with('Refferal')->with('Bank');
         if ($request->ajax()) {
             return DataTables::of($user)
                 ->addIndexColumn()
@@ -44,10 +44,18 @@ class MemberController extends Controller
                     return $amounts;
                 })
                 ->addColumn('refferal', function ($row) {
-                    $amounts = $row->Refferal->reff_code;
-                    return $amounts;
+                    $refferal = $row->Refferal->reff_code;
+                    return $refferal;
                 })
-                ->rawColumns(['status', 'action', 'created_at', 'balance','refferal'])
+                ->addColumn('bank_name', function ($row) {
+                    $bank_name = $row->Bank->nama_bank;
+                    return $bank_name;
+                })
+                ->addColumn('nomor_rekening', function ($row) {
+                    $nomor_rekening = $row->Bank->nomor_rekening;
+                    return $nomor_rekening;
+                })
+                ->rawColumns(['status', 'action', 'created_at', 'balance','refferal','bank_name','nomor_rekening'])
                 ->make(true);
         }
         return view('member.list', compact('user'));

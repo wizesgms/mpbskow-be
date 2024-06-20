@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Refferal::class, 'id', 'user_id');
     }
+
+    public function Bank()
+    {
+        return $this->belongsTo(Bank::class, 'id', 'id_user');
+    }
 }
