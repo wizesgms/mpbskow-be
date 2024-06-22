@@ -54,7 +54,7 @@
                                         {{ $trx->metode }}</td>
                                     <td class="text-center"
                                         style="vertical-align: middle; white-space: normal; font-size: 13px;">
-                                        {{ $trx->Bonus->bonus }}</td>
+                                        {{ $trx->bonus_amount }}</td>
                                     <td class="text-center"
                                         style="vertical-align: middle; white-space: normal; font-size: 13px;">
                                         {{ $trx->keterangan }}</td>

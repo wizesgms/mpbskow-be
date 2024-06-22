@@ -49,7 +49,7 @@ class DepositController extends Controller
                     return $cbtrn;
                 })
                 ->addColumn('bonus', function ($row) {
-                    $bonus = $row->Bonus->bonus.'%';
+                    $bonus = $row->bonus_amount .'%';
                     return $bonus;
                 })
                 ->addColumn('total', function ($row) {
