@@ -29,7 +29,7 @@ Route::middleware(['admin'])->group( function () {
 
     Route::get('members','MemberController@index')->name('members.list');
     Route::get('members/{extplayer}/details','MemberController@details')->name('members.list.details');
-    Route::post('members/{extplayer}/update','MemberController@update')->name('members.list.update');
+    Route::post('members/{id}/update','MemberController@update')->name('members.list.update');
     Route::post('members/{extplayer}/bank','MemberController@banks')->name('members.list.bank');
     Route::get('members/balance','MemberController@balance')->name('members.balance');
     Route::post('members/balance/add','MemberController@balanceup')->name('members.balance.update');
