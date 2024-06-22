@@ -21,7 +21,7 @@ class DepositController extends Controller
 
     public function list(Request $request)
     {
-        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->with('Bonus')->orderBy('created_at', 'desc');
+        $transaction = Transaction::where('transaksi', 'Top Up')->orderBy('created_at', 'desc');
         if ($request->ajax()) {
             return DataTables::of($transaction)
                 ->addIndexColumn()
@@ -49,8 +49,8 @@ class DepositController extends Controller
                     return $cbtrn;
                 })
                 ->addColumn('bonus', function ($row) {
-                    $cbtrn = $row->Bonus->bonus;
-                    return $cbtrn;
+                    $bonus = $row->Bonus->bonus.'%';
+                    return $bonus;
                 })
                 ->addColumn('total', function ($row) {
                     $amounts = 'Rp.' . number_format($row->total);
