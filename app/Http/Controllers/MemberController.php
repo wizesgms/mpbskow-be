@@ -103,9 +103,7 @@ class MemberController extends Controller
     {
         $user = User::find($id);
         $user->nama_lengkap = $request->fullname;
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
+        $user->password = Hash::make($request->newpassword);
         $user->save();
 
         return back()->with('success', 'User Successfully update');

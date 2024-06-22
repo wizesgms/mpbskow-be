@@ -52,7 +52,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-floating form-floating-outline">
-                                <input type="text" class="form-control" name="password" placeholder="........" />
+                                <input type="text" class="form-control" name="newpassword" placeholder="........" />
                                 <label for="password">Password</label>
                             </div>
                         </div>
