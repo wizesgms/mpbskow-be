@@ -15,7 +15,7 @@ class DepositController extends Controller
 {
     public function index()
     {
-        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->with('Bonus')->orderBy('created_at', 'desc')->where('status', 'Pending')->get();
+        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->orderBy('created_at', 'desc')->where('status', 'Pending')->get();
         return view('deposit.pending', compact('transaction'));
     }
 
