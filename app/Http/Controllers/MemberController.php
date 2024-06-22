@@ -74,7 +74,7 @@ class MemberController extends Controller
         $reff = Refferal::where('upline', $reffs->reff_code)->with('User')->get();
         $reffc = Refferal::where('upline', $reffs->reff_code)->count();
         $transaction = Transaction::where('id_user', $user->id)->get();
-        $bank = Bank::where('id_user', $user->id)->first();
+        $bank = Bank::where('id_user', $user->id)->where('level' ,'user')->first();
         return view('member.details', compact('user', 'transaction', 'bank','reff','reffc'));
     }
 
