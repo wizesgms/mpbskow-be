@@ -15,13 +15,13 @@ class DepositController extends Controller
 {
     public function index()
     {
-        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->orderBy('created_at', 'desc')->where('status', 'Pending')->get();
+        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->with('Bonus')->orderBy('created_at', 'desc')->where('status', 'Pending')->get();
         return view('deposit.pending', compact('transaction'));
     }
 
     public function list(Request $request)
     {
-        $transaction = Transaction::where('transaksi', 'Top Up')->orderBy('created_at', 'desc');
+        $transaction = Transaction::where('transaksi', 'Top Up')->with('BankUser')->with('Bonus')->orderBy('created_at', 'desc');
         if ($request->ajax()) {
             return DataTables::of($transaction)
                 ->addIndexColumn()
@@ -48,11 +48,15 @@ class DepositController extends Controller
                     $cbtrn = $row->created_at;
                     return $cbtrn;
                 })
+                ->addColumn('bonus', function ($row) {
+                    $cbtrn = $row->Bonus->bonus;
+                    return $cbtrn;
+                })
                 ->addColumn('total', function ($row) {
                     $amounts = 'Rp.' . number_format($row->total);
                     return $amounts;
                 })
-                ->rawColumns(['status', 'created_at', 'total', 'invoice','bank_user'])
+                ->rawColumns(['status', 'created_at', 'total', 'invoice','bank_user','bonus'])
                 ->make(true);
         }
         return view('deposit.list', compact('transaction'));
